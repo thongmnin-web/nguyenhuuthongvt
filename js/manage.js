@@ -4,9 +4,12 @@ window.onload = function() {
   const tableBody = document.querySelector("#orders-table tbody");
   const noOrders = document.getElementById("no-orders");
 
+
+
   if (orders.length === 0) {
     noOrders.style.display = "block";
     return;
+
   }
 
   orders.forEach(order => {
@@ -15,6 +18,7 @@ window.onload = function() {
       <td>${order.time || ""}</td>
       <td>${order.name}</td>
       <td>${order.address}</td>
+        
       <td>${order.phone}</td>
       <td class="order-items">
         <ul style="margin:0; padding-left:18px;">
@@ -23,5 +27,10 @@ window.onload = function() {
       </td>
     `;
     tableBody.appendChild(tr);
+
   });
+  noOrders.style.display = "none";  
+  document.getElementById("new-order-btn").onclick = function() {
+    window.location.href = "Cart.html";
+  };    
 };

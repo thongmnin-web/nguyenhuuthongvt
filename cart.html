@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Giỏ hàng</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,6 +13,7 @@
       <a href="index.html">Trang chủ</a>
       <a href="catalog.html">Danh mục sản phẩm</a>
       <a href="cart.html">Giỏ hàng</a>
+      
     </nav>
   </header>
   <main>
@@ -21,6 +23,7 @@
       <h3>Thông tin người nhận</h3>
       <label>Họ tên:</label>
       <input type="text" id="name" required style="width:100%;margin-bottom:10px;">
+
       <label>Số nhà:</label>
       <input type="text" id="address_number" required style="width:100%;margin-bottom:10px;">
       <label>Tên đường:</label>
@@ -34,13 +37,33 @@
       <label>Số điện thoại:</label>
       <input type="text" id="phone" required style="width:100%;margin-bottom:10px;">
       <button type="button" id="confirm-btn" style="width:100%;background:#0dec84;color:#fff;padding:10px;border:none;border-radius:5px;font-size:1rem;">Xác nhận đặt hàng</button>
+
     </form>
+
     <button id="checkout-btn" style="margin:20px auto;display:block;background:#0dec84;color:#fff;padding:10px 30px;border:none;border-radius:5px;font-size:1rem;">Mua hàng</button>
+    <div id="order-info" style="display:none;max-width:500px;margin:30px auto 0;background:#eaffea;padding:18px 22px;border-radius:10px;border:1px solid #0dec84;">
+      <h3>Thông tin người nhận</h3>
+      <p id="order-summary"></p>
+      <h3>Chi tiết đơn hàng</h3>
+      <div id="order-detail"></div>
+      <p style="font-weight:bold; color:#0dec84; margin-top:15px;">Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ với bạn sớm nhất.</p>
+          
+      <button id="new-order-btn" style="margin-top:10px; background:#0dec84;color:#fff;padding:10px 30px;border:none;border-radius:5px;font-size:1rem;">Đặt hàng mới</button>
+
+    </div>
   </main>
+  <footer>
+    <p>
+      <a href="https://zalo.me/0397768941" target="_blank" class="zalo-btn">
+        
+        <span class="zalo-icon-circle">
+          <img src="img/icon1.png" alt="Zalo">
+        </span>
+        Liên hệ Zalo
+      </a>
+    </p>
+    <p class="footer-copyright">&copy; Shop Online</p>
+  </footer>
   <script src="js/main.js"></script>
 </body>
 </html>
-<div id="order-info" style="display:none;max-width:500px;margin:30px auto 0;background:#eaffea;padding:18px 22px;border-radius:10px;border:1px solid #0dec84;">
-  <h3>Thông tin người nhận</h3>
-  <div id="order-detail"></div>
-</div>
