@@ -55,31 +55,51 @@ if (document.getElementById("cart-items")) {
     };
     confirmBtn.onclick = function() {
       const name = document.getElementById("name").value.trim();
-      const address = document.getElementById("address").value.trim();
+      const address_number = document.getElementById("address_number").value.trim();
+      const address_street = document.getElementById("address_street").value.trim();
+      const address_ward = document.getElementById("address_ward").value.trim();
+      const address_district = document.getElementById("address_district").value.trim();
+      const address_province = document.getElementById("address_province").value.trim();
       const phone = document.getElementById("phone").value.trim();
-      if (!name || !address || !phone) {
+      const phoneRegex = /^0\d{9}$/;
+      if (!name || !address_number || !address_street || !address_ward || !address_district || !address_province || !phone) {
         alert("Vui lòng nhập đầy đủ thông tin!");
+        return;
+      }
+      if (!phoneRegex.test(phone)) {
+        alert("Số điện thoại phải bắt đầu bằng 0 và đủ 10 số!");
         return;
       }
       // Lưu đơn hàng vào localStorage
       let orders = JSON.parse(localStorage.getItem("orders")) || [];
-      orders.push({
+      const order = {
         name,
-        address,
+        address: `${address_number}, ${address_street}, ${address_ward}, ${address_district}, ${address_province}`,
         phone,
-        items: cart.slice(),
+        cart: cart,
+        total: cart.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0),
         time: new Date().toLocaleString()
-      });
+      };
+      orders.push(order);
       localStorage.setItem("orders", JSON.stringify(orders));
-      // Xử lý xác nhận đơn hàng
-      alert(`Cảm ơn bạn ${name} đã đặt hàng! Đơn hàng sẽ được giao tới: ${address}. SĐT: ${phone}`);
+      // Hiển thị thông tin người nhận
+      document.getElementById("order-info").style.display = "block";
+      document.getElementById("order-detail").innerHTML = `
+        <strong>Họ tên:</strong> ${order.name}<br>
+        <strong>Địa chỉ:</strong> ${order.address}<br>
+        <strong>Số điện thoại:</strong> ${order.phone}<br>
+        <strong>Tổng tiền:</strong> ${order.total.toLocaleString()}đ<br>
+        <strong>Thời gian đặt:</strong> ${order.time}
+      `;
+      // Xóa giỏ hàng
       cart = [];
       localStorage.setItem("cart", JSON.stringify(cart));
-      loadCart();
+      document.getElementById("cart-items").innerHTML = "";
+      document.getElementById("total").textContent = "";
       checkoutForm.style.display = "none";
-      document.getElementById("name").value = "";
-      document.getElementById("address").value = "";
-      document.getElementById("phone").value = "";
+      checkoutBtn.style.display = "none";
+      alert("Cảm ơn bạn đã đặt hàng!");
     };
+// ...existing code...
   }
 }

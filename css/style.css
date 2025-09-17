@@ -191,3 +191,36 @@ justify-content: space-between;
 #cart-items button:hover {
   background: darkred;
 }
+/* Nút thêm vào giỏ và mua ngay */
+.btn-cart {
+  background: #0dec84;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-cart:hover {
+  background: #00c3ff;
+  transform: scale(1.07);
+}
+
+.btn-buy {
+  background: linear-gradient(90deg, #ffb347, #ff5e62);
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 2px 8px #ff5e6230;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-buy:hover {
+  background: linear-gradient(90deg, #ff5e62, #ffb347);
+  transform: scale(1.07) rotate(-2deg);
+}

@@ -14,22 +14,33 @@
       <a href="cart.html">Giỏ hàng</a>
     </nav>
   </header>
-
   <main>
     <ul id="cart-items"></ul>
-    <h3 id="total">Tổng: 0đ</h3>
-    <button id="checkout-btn">Mua hàng</button>
-
-    <!-- Form thanh toán -->
-    <div id="checkout-form" style="display:none; margin-top:20px;">
-      <h2>Thông tin đặt hàng</h2>
-      <label>Họ tên: <input type="text" id="name"></label><br><br>
-      <label>Địa chỉ: <input type="text" id="address"></label><br><br>
-      <label>Số điện thoại: <input type="text" id="phone"></label><br><br>
-      <button id="confirm-btn">Xác nhận</button>
-    </div>
+    <div id="total" style="font-size:1.2rem; font-weight:bold; margin: 20px 0;"></div>
+    <form id="checkout-form" style="display:none; max-width:400px; margin:auto; background:#f8f8f8; padding:20px; border-radius:10px;">
+      <h3>Thông tin người nhận</h3>
+      <label>Họ tên:</label>
+      <input type="text" id="name" required style="width:100%;margin-bottom:10px;">
+      <label>Số nhà:</label>
+      <input type="text" id="address_number" required style="width:100%;margin-bottom:10px;">
+      <label>Tên đường:</label>
+      <input type="text" id="address_street" required style="width:100%;margin-bottom:10px;">
+      <label>Phường/Xã:</label>
+      <input type="text" id="address_ward" required style="width:100%;margin-bottom:10px;">
+      <label>Quận/Huyện:</label>
+      <input type="text" id="address_district" required style="width:100%;margin-bottom:10px;">
+      <label>Tỉnh/Thành:</label>
+      <input type="text" id="address_province" required style="width:100%;margin-bottom:10px;">
+      <label>Số điện thoại:</label>
+      <input type="text" id="phone" required style="width:100%;margin-bottom:10px;">
+      <button type="button" id="confirm-btn" style="width:100%;background:#0dec84;color:#fff;padding:10px;border:none;border-radius:5px;font-size:1rem;">Xác nhận đặt hàng</button>
+    </form>
+    <button id="checkout-btn" style="margin:20px auto;display:block;background:#0dec84;color:#fff;padding:10px 30px;border:none;border-radius:5px;font-size:1rem;">Mua hàng</button>
   </main>
-
   <script src="js/main.js"></script>
 </body>
 </html>
+<div id="order-info" style="display:none;max-width:500px;margin:30px auto 0;background:#eaffea;padding:18px 22px;border-radius:10px;border:1px solid #0dec84;">
+  <h3>Thông tin người nhận</h3>
+  <div id="order-detail"></div>
+</div>
