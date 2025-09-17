@@ -13,7 +13,7 @@ function loadCart() {
   let cartItems = document.getElementById("cart-items");
   let total = 0;
   cartItems.innerHTML = "";
-        
+
 
   cart.forEach((item, index) => {
     let li = document.createElement("li");
@@ -117,6 +117,7 @@ if (document.getElementById("cart-items")) {
       cart = [];
       localStorage.setItem("cart", JSON.stringify(cart));
 
+
       document.getElementById("cart-items").innerHTML = "";
       document.getElementById("total").textContent = "";
       checkoutForm.style.display = "none";
@@ -128,8 +129,11 @@ if (document.getElementById("cart-items")) {
         checkoutBtn.style.display = "block";
         loadCart();
 
+
     };
 // ...existing code...
   }
 }
+      
 }
+  
