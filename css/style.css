@@ -418,35 +418,9 @@ nav a {
 
 
 }
-/* Responsive cho mobile */
-@media (max-width: 700px) {
-  .products-container {
-    gap: 15px;
-    justify-content: space-around;
-  }
-  
-  .product {
-    width: calc(50% - 20px);
-    min-width: 140px;
-    margin: 0;
-  }
-  
-  .product img {
-    width: 100%;
-    height: auto;
-    max-height: 120px;
-  }
-}
-
-/* Đối với màn hình rất nhỏ */
-@media (max-width: 480px) {
-  .product {
-    width: 100%;
-    max-width: 250px;
-  }
 
 
-  }
+
   .electronics-gallery {
     gap: 8px;
     padding: 8px 0;
@@ -999,30 +973,7 @@ main .zalo-btn:hover {
   margin: 0 0 10px 0;
   font-weight: 500;
 }
-/* Hiệu ứng cho footer */
-footer {  
-  background: #0dec84;
-  color: white;
-  padding: 15px 20px;
-  box-shadow: 0 -2px 8px #0dec8430;
-  border-radius: 8px;
-  margin: 20px 0 10px 0;
-  transition: background 0.2s, box-shadow 0.2s;
-}
-footer:hover {
-  background: #00c3ff;
-  box-shadow: 0 -4px 16px #00c3ff40;
-  filter: brightness(1.05);
-}
-footer a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  transition: text-decoration 0.2s;
-}
-footer a:hover {
-  text-decoration: underline;
-}
+
 /* Hiệu ứng cho header */
 header {
   background: #0dec84;
@@ -2162,7 +2113,7 @@ main p:hover {
   text-shadow: 0 2px 4px #0002;
 }
 }
-/* Container cho các sản phẩm - SỬA LỖI HIỂN THỊ HÀNG NGANG */
+/* Container cho các sản phẩm */
 .products-container {
   display: flex;
   flex-wrap: wrap;
@@ -2171,7 +2122,6 @@ main p:hover {
   margin: 20px 0;
 }
 
-/* Đảm bảo sản phẩm hiển thị đúng */
 .product {
   width: 200px;
   margin: 0;
@@ -2205,8 +2155,6 @@ main p:hover {
     max-height: 120px;
   }
 }
-
-/* Đối với màn hình rất nhỏ */
 @media (max-width: 480px) {
   .product {
     width: 100%;
