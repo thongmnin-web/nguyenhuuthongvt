@@ -2,69 +2,200 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Giỏ hàng</title>
+  <title>Giỏ hàng - Shop Online</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* CSS Riêng cho trang Giỏ hàng */
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr; /* double column for cart and checkout */
+      gap: 30px;
+      align-items: start;
+    }
+
+    /* column left: cart table */
+    .cart-container {
+      background: white;
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .cart-table th {
+      text-align: left;
+      padding-bottom: 15px;
+      color: #888;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-table td {
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+      vertical-align: middle;
+    }
+
+    .item-info { display: flex; align-items: center; gap: 15px; }
+    .item-info img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #eee;}
+    
+    .btn-remove {
+      color: #ff4d4d;
+      background: none; border: none;
+      cursor: pointer; font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .btn-remove:hover { text-decoration: underline; }
+
+    /* column right: checkout form */
+    .checkout-box {
+      background: white;
+      padding: 25px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 100px; /* scroll offset */
+    }
+
+    .checkout-box h3 { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: var(--font-main);
+      font-size: 1rem;
+      transition: border 0.3s;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    .total-row {
+      display: flex; justify-content: space-between;
+      font-size: 1.2rem; font-weight: 800;
+      margin: 20px 0; color: var(--primary-dark);
+    }
+
+    .btn-checkout {
+      width: 100%;
+      padding: 15px;
+      background: var(--primary-color);
+      color: white; border: none;
+      border-radius: 8px;
+      font-size: 1rem; font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn-checkout:hover { background: var(--primary-dark); }
+
+    /*responsive mobile */
+    @media (max-width: 768px) {
+      .cart-layout { grid-template-columns: 1fr; }  /*one column on small screens */
+      .item-info img { width: 50px; height: 50px; }
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>🛒 Giỏ hàng của bạn</h1>
     <nav>
-      <a href="index.html">Trang chủ</a>
-      <a href="catalog.html">Danh mục sản phẩm</a>
-      <a href="cart.html">Giỏ hàng</a>
-      
+      <a class="brand" href="index.html">Shop Online</a>
+      <div>
+        <a href="index.html">Trang chủ</a>
+        <a href="catalog.html">Sản phẩm</a>
+        <a href="cart.html" class="active">Giỏ hàng</a>
+      </div>
     </nav>
   </header>
+
   <main>
-    <ul id="cart-items"></ul>
-    <div id="total" style="font-size:1.2rem; font-weight:bold; margin: 20px 0;"></div>
-    <form id="checkout-form" style="display:none; max-width:400px; margin:auto; background:#f8f8f8; padding:20px; border-radius:10px;">
-      <h3 style="text-align: center;">Thông tin người nhận</h3>
-      
-      <label>Họ tên:</label>
-      <input type="text" id="name" required style="width:100%;margin-bottom:10px;">
+    <h2 style="margin-bottom: 20px;">Giỏ hàng của bạn</h2>
 
-      <label>Số nhà:</label>
-      <input type="text" id="address_number" required style="width:100%;margin-bottom:10px;">
-      <label>Tên đường:</label>
-      <input type="text" id="address_street" required style="width:100%;margin-bottom:10px;">
-      <label>Phường/Xã:</label>
-      <input type="text" id="address_ward" required style="width:100%;margin-bottom:10px;">
-      <label>Quận/Huyện:</label>
-      <input type="text" id="address_district" required style="width:100%;margin-bottom:10px;">
-      <label>Tỉnh/Thành:</label>
-      <input type="text" id="address_province" required style="width:100%;margin-bottom:10px;">
-      <label>Số điện thoại:</label>
-      <input type="text" id="phone" required style="width:100%;margin-bottom:10px;">
-      <button type="button" id="confirm-btn" style="width:100%;background:#0dec84;color:#fff;padding:10px;border:none;border-radius:5px;font-size:1rem;">Xác nhận đặt hàng</button>
+    <div class="cart-layout">
+      <section class="cart-container">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th style="width: 50%;">Sản phẩm</th>
+              <th style="width: 20%;">Đơn giá</th>
+              <th style="width: 20%;">Số lượng</th>
+              <th style="width: 10%;">Xóa</th>
+            </tr>
+          </thead>
+          <tbody id="cart-body">
+            <tr>
+                <td>
+                    <div class="item-info">
+                        <img src="img/sp1.jpg" alt="Sản phẩm">
+                        <div>
+                            <strong>Mạch điện cơ bản</strong>
+                            <p style="font-size: 0.85rem; color: #777;">Mã: #SP001</p>
+                        </div>
+                    </div>
+                </td>
+                <td style="font-weight: 600;">100,000đ</td>
+                <td><input type="number" value="1" min="1" style="width: 50px; padding: 5px; border-radius: 4px; border: 1px solid #ddd;"></td>
+                <td><button class="btn-remove">Xóa</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="empty-cart-msg" style="display:none; text-align:center; padding: 40px;">
+            <p>Giỏ hàng đang trống 😢</p>
+            <a href="catalog.html" style="color: var(--primary-color); font-weight:bold;">Quay lại mua sắm</a>
+        </div>
+      </section>
 
-    </form>
+      <section class="checkout-box">
+        <h3>Thông tin nhận hàng</h3>
+        <form id="checkout-form" onsubmit="return handleCheckout(event)">
+          <div class="form-group">
+            <label>Họ và tên</label>
+            <input type="text" id="name" required placeholder="Nguyễn Văn A">
+          </div>
+          <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="tel" id="phone" required placeholder="09xxx...">
+          </div>
+          <div class="form-group">
+            <label>Địa chỉ giao hàng</label>
+            <textarea id="address" rows="3" required placeholder="Số nhà, đường, phường..."></textarea>
+          </div>
 
-    <button id="checkout-btn" style="margin:20px auto;display:block;background:#0dec84;color:#fff;padding:10px 30px;border:none;border-radius:5px;font-size:1rem;">Mua hàng</button>
-    <div id="order-info" style="display:none;max-width:500px;margin:30px auto 0;background:#eaffea;padding:18px 22px;border-radius:10px;border:1px solid #0dec84;">
-      <h3>Thông tin người nhận</h3>
-      <p id="order-summary"></p>
-      <h3>Chi tiết đơn hàng</h3>
-      <div id="order-detail"></div>
-      <p style="font-weight:bold; color:#0dec84; margin-top:15px;">Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ với bạn sớm nhất.</p>
-      
-      <button id="new-order-btn" style="margin-top:10px; background:#0dec84;color:#fff;padding:10px 30px;border:none;border-radius:5px;font-size:1rem;">Đặt hàng mới</button>
+          <div class="total-row">
+            <span>Tổng cộng:</span>
+            <span id="total-price">100,000đ</span>
+          </div>
 
+          <button type="submit" class="btn-checkout">Xác Nhận Đặt Hàng</button>
+          <a href="catalog.html" style="display:block; text-align:center; margin-top:15px; color:#666; text-decoration:none; font-size:0.9rem;">Tiếp tục mua sắm</a>
+        </form>
+      </section>
     </div>
   </main>
+
   <footer>
-    <p>
-      <a href="https://zalo.me/0397768941" target="_blank" class="zalo-btn">
-        
-        <span class="zalo-icon-circle">
-          <img src="img/icon1.png" alt="Zalo">
-        </span>
-        Liên hệ Zalo
-      </a>
-    </p>
-    <p class="footer-copyright">&copy; Shop Online</p>
+    <p>&copy; 2025 Shop Online</p>
   </footer>
+
   <script src="js/main.js"></script>
+  <script>
+  
+    function handleCheckout(e) {
+        e.preventDefault();
+        alert("Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ sớm.");
+
+        window.location.href = 'index.html';
+    }
+  </script>
 </body>
 </html>

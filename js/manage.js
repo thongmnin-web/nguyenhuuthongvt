@@ -1,36 +1,39 @@
-// Quản lý đơn hàng: Hiển thị danh sách đơn hàng từ localStorage
-window.onload = function() {
-  const orders = JSON.parse(localStorage.getItem("orders")) || [];
-  const tableBody = document.querySelector("#orders-table tbody");
-  const noOrders = document.getElementById("no-orders");
+const ORDERS_KEY = 'shop_orders';
 
+function renderOrders() {
+    const tableBody = document.querySelector('#orders-table tbody');
+    const noOrdersMsg = document.getElementById('no-orders');
+    
+    let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
 
+    if (orders.length === 0) {
+        if(noOrdersMsg) noOrdersMsg.style.display = 'block';
+        return;
+    }
 
-  if (orders.length === 0) {
-    noOrders.style.display = "block";
-    return;
+    let html = '';
 
-  }
+    orders.slice().reverse().forEach(order => {
 
-  orders.forEach(order => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${order.time || ""}</td>
-      <td>${order.name}</td>
-      <td>${order.address}</td>
-        
-      <td>${order.phone}</td>
-      <td class="order-items">
-        <ul style="margin:0; padding-left:18px;">
-          ${(order.items || []).map(item => `<li>${item.name} (${item.price.toLocaleString()}đ)</li>`).join("")}
-        </ul>
-      </td>
-    `;
-    tableBody.appendChild(tr);
+        let productList = order.items.map(item => 
+            `- ${item.name} (x${item.quantity})`
+        ).join('<br>');
 
-  });
-  noOrders.style.display = "none";  
-  document.getElementById("new-order-btn").onclick = function() {
-    window.location.href = "Cart.html";
-  };    
-};
+        html += `
+            <tr>
+                <td>${order.date}</td>
+                <td>${order.customer.name}</td>
+                <td>${order.customer.address}</td>
+                <td>${order.customer.phone}</td>
+                <td>
+                    ${productList}
+                    <br><strong>Tổng: ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.totalPrice)}</strong>
+                </td>
+            </tr>
+        `;
+    });
+
+    if(tableBody) tableBody.innerHTML = html;
+}
+
+document.addEventListener('DOMContentLoaded', renderOrders);
