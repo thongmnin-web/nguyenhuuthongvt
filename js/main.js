@@ -106,36 +106,46 @@ function updateQuantity(index, newQty) {
     }
 }
 
-// --- 5. THANH TOÁN & GỬI ZALO ---
+// --- 5. THANH TOÁN & GỬI ZALO (ĐÃ SỬA LỖI HIỂN THỊ) ---
 function handleCheckout(e) {
     e.preventDefault();
     
+    // 1. Kiểm tra giỏ hàng
     let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
     if (cart.length === 0) {
         alert('Giỏ hàng đang trống!');
         return;
     }
 
+    // 2. Lấy thông tin khách hàng
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
 
-    // Kiểm tra số điện thoại
     if (phone.length < 10) {
         alert("Vui lòng nhập số điện thoại hợp lệ!");
         return;
     }
 
-    // Tạo nội dung tin nhắn Zalo
-    let msg = `👋 Đơn hàng mới!\n👤 Tên: ${name}\n📞 SĐT: ${phone}\n🏡 ĐC: ${address}\n----------------\n`;
+    // 3. Soạn nội dung tin nhắn (Dùng ký tự xuống dòng %0A cho URL an toàn)
+    // Lưu ý: Zalo đôi khi kén ký tự đặc biệt, nên soạn đơn giản nhất có thể.
+    let msg = `DON HANG MOI!`;
+    msg += `\n- Khach: ${name}`;
+    msg += `\n- SDT: ${phone}`;
+    msg += `\n- Dia chi: ${address}`;
+    msg += `\n----------------`;
+    msg += `\nDANH SACH MUA:`;
+    
     let total = 0;
     cart.forEach(item => {
-        msg += `- ${item.name} x${item.quantity}: ${formatCurrency(item.price * item.quantity)}\n`;
+        msg += `\n+ ${item.name} (x${item.quantity}): ${formatCurrency(item.price * item.quantity)}`;
         total += item.price * item.quantity;
     });
-    msg += `----------------\n💰 TỔNG: ${formatCurrency(total)}`;
+    
+    msg += `\n----------------`;
+    msg += `\nTONG CONG: ${formatCurrency(total)}`;
 
-    // Lưu lịch sử đơn hàng
+    // 4. Lưu đơn hàng vào LocalStorage (để xem ở trang Manage)
     const newOrder = {
         id: Date.now(),
         date: new Date().toLocaleString('vi-VN'),
@@ -147,17 +157,23 @@ function handleCheckout(e) {
     orders.push(newOrder);
     localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
 
-    // Xóa giỏ hàng
+    // 5. Xóa giỏ hàng sau khi chốt
     localStorage.removeItem(CART_KEY);
 
+    // --- QUAN TRỌNG: CẤU HÌNH GỬI ZALO ---
     
+    // BƯỚC A: Điền số điện thoại chủ shop (Bắt buộc dùng 84 ở đầu, bỏ số 0)
+    // Ví dụ: Số 0397768941 -> Viết là 84397768941
     const yourZaloPhone = '84397768941'; 
-    const zaloUrl = `https://zalo.me/${yourZaloPhone}?text=${encodeURIComponent(msg)}`;
 
-if(confirm('Đơn hàng đã tạo xong! Bấm OK để chuyển sang Zalo gửi đơn.')) {
-    window.location.href = zaloUrl; 
-}
-}
+    // BƯỚC B: Mã hóa tin nhắn để truyền qua URL không bị lỗi
+    const encodedMsg = encodeURIComponent(msg);
+    
+    // BƯỚC C: Tạo link
+    const zaloUrl = `https://zalo.me/${yourZaloPhone}?text=${encodedMsg}`;
 
-//auto render cart on page load
-document.addEventListener('DOMContentLoaded', renderCart);
+    // 6. Chuyển hướng sang Zalo
+    if(confirm('Đơn hàng đã tạo xong! Bấm OK để chuyển sang Zalo gửi đơn cho Shop.')) {
+        window.location.href = zaloUrl; 
+    }
+}
