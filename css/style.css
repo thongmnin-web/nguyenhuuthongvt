@@ -200,23 +200,74 @@ footer {
     padding: 20px;
     margin-top: auto;
 }
+/* --- NÚT ZALO PRO VIP --- */
 .zalo-float {
-    position: fixed; bottom: 20px; right: 20px;
-    background: white; padding: 8px 15px;
-    border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    display: flex; align-items: center; gap: 10px;
-    text-decoration: none; color: #0068ff; font-weight: bold;
-    z-index: 999;
+    position: fixed;
+    bottom: 30px; right: 30px;
+    width: 60px; height: 60px;
+    background: #0068ff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 104, 255, 0.4);
+    z-index: 9999;
+    cursor: pointer;
+    animation: zalo-pulse 2s infinite; /* Hiệu ứng sóng */
+    transition: all 0.3s;
 }
-.zalo-float img { width: 30px; height: 30px; }
 
-/* Modal Ảnh */
-.modal {
-    display: none; position: fixed; z-index: 2000;
-    left: 0; top: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
-    align-items: center; justify-content: center;
+/* Icon bên trong */
+.zalo-float img {
+    width: 35px; height: 35px;
+    object-fit: contain;
+    animation: zalo-shake 3s infinite; /* Hiệu ứng lắc */
 }
-.modal img { max-width: 90%; max-height: 90%; border-radius: 8px;
- }
- 
+
+/* Chữ "Chat ngay" khi rê chuột vào */
+.zalo-float::before {
+    content: "Chat ngay";
+    position: absolute;
+    right: 70px; /* Hiện bên trái nút */
+    background: #333; color: white;
+    padding: 6px 12px; border-radius: 20px;
+    font-size: 0.85rem; font-weight: bold;
+    white-space: nowrap;
+    opacity: 0; visibility: hidden; /* Mặc định ẩn */
+    transition: all 0.3s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* Mũi tên nhỏ của tooltip */
+.zalo-float::after {
+    content: ""; position: absolute; right: 64px;
+    border-width: 6px; border-style: solid;
+    border-color: transparent transparent transparent #333;
+    opacity: 0; visibility: hidden; transition: all 0.3s;
+}
+
+/* Hiệu ứng khi rê chuột */
+.zalo-float:hover {
+    background: #0056d6;
+    transform: scale(1.1);
+}
+.zalo-float:hover::before, .zalo-float:hover::after {
+    opacity: 1; visibility: visible;
+    right: 75px; /* Trượt nhẹ ra */
+}
+.zalo-float:hover::after { right: 69px; }
+
+/* --- ĐỊNH NGHĨA CHUYỂN ĐỘNG --- */
+@keyframes zalo-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 104, 255, 0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(0, 104, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 104, 255, 0); }
+}
+
+@keyframes zalo-shake {
+    0% { transform: rotate(0deg); }
+    5% { transform: rotate(15deg); }
+    10% { transform: rotate(-15deg); }
+    15% { transform: rotate(15deg); }
+    20% { transform: rotate(-15deg); }
+    25% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+}

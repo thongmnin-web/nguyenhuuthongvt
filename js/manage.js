@@ -1,11 +1,11 @@
 const ORDERS_KEY = 'shop_orders';
 
-// --- HÀM ĐỊNH DẠNG TIỀN ---
+// Hàm định dạng tiền tệ (VND)
 function formatCurrency(amount) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 }
 
-// --- 1. HIỂN THỊ DANH SÁCH ĐƠN HÀNG ---
+// Hiển thị danh sách đơn hàng
 function renderOrders() {
     const tableBody = document.querySelector('#orders-table tbody');
     const noOrdersMsg = document.getElementById('no-orders');
@@ -16,7 +16,7 @@ function renderOrders() {
     // Nếu chưa có đơn nào
     if (orders.length === 0) {
         if(noOrdersMsg) noOrdersMsg.style.display = 'block';
-        if(tableBody) tableBody.innerHTML = ''; // Xóa trắng bảng
+        if(tableBody) tableBody.innerHTML = ''; 
         return;
     }
 
@@ -25,10 +25,10 @@ function renderOrders() {
 
     let html = '';
     
-    // Duyệt ngược (slice().reverse()) để đơn mới nhất hiện lên trên cùng
+    
     orders.slice().reverse().forEach(order => {
         
-        // Tạo danh sách tên sản phẩm (xuống dòng cho đẹp)
+      
         let productList = order.items.map(item => 
             `- ${item.name} <b>(x${item.quantity})</b>`
         ).join('<br>');
@@ -59,25 +59,25 @@ function renderOrders() {
     if(tableBody) tableBody.innerHTML = html;
 }
 
-// --- 2. HÀM XÓA ĐƠN HÀNG ---
+
 function deleteOrder(orderId) {
     if (confirm('Bạn chắc chắn muốn xóa đơn hàng này? (Hành động này không thể hoàn tác)')) {
-        // 1. Lấy danh sách cũ
+
         let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
         
-        // 2. Lọc ra danh sách mới (Bỏ qua đơn hàng có ID trùng khớp)
+    
         let newOrders = orders.filter(order => order.id !== orderId);
         
-        // 3. Lưu danh sách mới lại vào bộ nhớ
+      
         localStorage.setItem(ORDERS_KEY, JSON.stringify(newOrders));
         
-        // 4. Vẽ lại bảng ngay lập tức
+     
         renderOrders();
     }
 }
 
-// Chạy khi tải trang (hoặc khi nhập đúng PIN từ manage.html)
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Kiểm tra xem hàm này được gọi từ đâu, nếu trang đã load xong thì chạy luôn
+   
     renderOrders();
 });

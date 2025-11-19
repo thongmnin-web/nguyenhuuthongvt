@@ -93,20 +93,7 @@ function removeFromCart(index) {
     }
 }
 
-// --- 4. CẬP NHẬT SỐ LƯỢNG ---
-function updateQuantity(index, newQty) {
-    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-    newQty = parseInt(newQty);
-    if (newQty < 1) newQty = 1;
-    
-    if (cart[index]) {
-        cart[index].quantity = newQty;
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
-        renderCart();
-    }
-}
-
-// --- 5. THANH TOÁN & GỬI ZALO ---
+// --- 5. THANH TOÁN: GỬI GOOGLE SHEETS & ZALO ---
 function handleCheckout(e) {
     e.preventDefault();
     
@@ -119,46 +106,63 @@ function handleCheckout(e) {
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
+    const btnSubmit = document.querySelector('.btn-checkout');
 
-    // Kiểm tra số điện thoại
     if (phone.length < 10) {
         alert("Vui lòng nhập số điện thoại hợp lệ!");
         return;
     }
 
-    // Tạo nội dung tin nhắn Zalo
-    let msg = `👋 Đơn hàng mới!\n👤 Tên: ${name}\n📞 SĐT: ${phone}\n🏡 ĐC: ${address}\n----------------\n`;
-    let total = 0;
-    cart.forEach(item => {
-        msg += `- ${item.name} x${item.quantity}: ${formatCurrency(item.price * item.quantity)}\n`;
-        total += item.price * item.quantity;
-    });
-    msg += `----------------\n💰 TỔNG: ${formatCurrency(total)}`;
+    // 1. Hiệu ứng đang gửi (để khách không bấm nhiều lần)
+    btnSubmit.innerHTML = "⏳ Đang gửi đơn hàng...";
+    btnSubmit.disabled = true;
 
-    // Lưu lịch sử đơn hàng
-    const newOrder = {
-        id: Date.now(),
-        date: new Date().toLocaleString('vi-VN'),
-        customer: { name, phone, address },
-        items: cart,
-        totalPrice: total
-    };
-    let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
-    orders.push(newOrder);
-    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-
-    // Xóa giỏ hàng
-    localStorage.removeItem(CART_KEY);
-
+    // 2. Chuẩn bị dữ liệu gửi đi
+    let productNames = cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
+    let totalMoney = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
-    const yourZaloPhone = '84397768941'; 
-    const zaloUrl = `https://zalo.me/${yourZaloPhone}?text=${encodeURIComponent(msg)}`;
+    let dataToSend = {
+        date: new Date().toLocaleString('vi-VN'),
+        name: name,
+        phone: phone,
+        address: address,
+        items: productNames,
+        total: formatCurrency(totalMoney)
+    };
 
-if(confirm('Đơn hàng đã tạo xong! Bấm OK để chuyển sang Zalo gửi đơn.')) {
-    window.location.href = zaloUrl; 
+    // --- CẤU HÌNH URL GOOGLE SHEETS CỦA BẠN ---
+    // Dán cái link dài ngoằng bạn vừa copy ở Bước 1 vào giữa 2 dấu nháy dưới đây:
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyt-ME7Flu-76TYVFodyINKCc1ctkPPZ5dbB6Qg4tHpoGNejMhqys9_DRypc5jNmialew/exec"; 
+
+    // 3. Gửi lên Google Sheets
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors", // Quan trọng để không bị lỗi chặn
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend)
+    })
+    .then(() => {
+        // 4. Gửi thành công -> Chuyển tiếp qua Zalo
+        // Tạo link Zalo
+        const yourZaloPhone = '84397768941'; // Số của bạn
+        let msg = `DON HANG MOI!\nKhach: ${name}\nSDT: ${phone}\nTong: ${formatCurrency(totalMoney)}\nChi tiet: ${productNames}`;
+        const zaloUrl = `https://zalo.me/${yourZaloPhone}?text=${encodeURIComponent(msg)}`;
+        
+        // Xóa giỏ hàng
+        localStorage.removeItem(CART_KEY);
+        
+        if(confirm('Đã gửi đơn hàng thành công! Bấm OK để báo qua Zalo.')) {
+            window.location.href = zaloUrl;
+        } else {
+             window.location.href = 'index.html';
+        }
+    })
+    .catch(error => {
+        alert("Có lỗi xảy ra, vui lòng thử lại!");
+        btnSubmit.innerHTML = "Xác Nhận Đặt Hàng";
+        btnSubmit.disabled = false;
+        console.error('Error:', error);
+    });
 }
-
-}
-
 //auto render cart on page load
 document.addEventListener('DOMContentLoaded', renderCart);
