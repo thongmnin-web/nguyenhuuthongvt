@@ -6,105 +6,131 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    /* CSS Riêng cho trang Giỏ hàng */
+<style>
+    /* Layout chung */
     .cart-layout {
       display: grid;
-      grid-template-columns: 2fr 1fr; /* double column for cart and checkout */
+      grid-template-columns: 2fr 1fr; /* Máy tính: 2 phần giỏ, 1 phần thanh toán */
       gap: 30px;
       align-items: start;
     }
 
-    /* column left: cart table */
+    /* Khung chứa giỏ hàng */
     .cart-container {
       background: white;
       padding: 20px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden; /* Giữ bo góc */
+    }
+
+    /* Xử lý bảng trên Mobile (QUAN TRỌNG) */
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá to */
+        -webkit-overflow-scrolling: touch; /* Cuộn mượt trên iPhone */
     }
 
     .cart-table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 400px; /* Đảm bảo bảng không bị co rúm lại quá bé */
     }
 
     .cart-table th {
       text-align: left;
-      padding-bottom: 15px;
-      color: #888;
+      padding: 15px 10px;
+      color: #666;
       font-size: 0.9rem;
       border-bottom: 1px solid #eee;
+      white-space: nowrap; /* Không xuống dòng tiêu đề */
     }
 
     .cart-table td {
-      padding: 15px 0;
+      padding: 15px 10px;
       border-bottom: 1px solid #eee;
       vertical-align: middle;
     }
 
-    .item-info { display: flex; align-items: center; gap: 15px; }
-    .item-info img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #eee;}
+    /* Ảnh sản phẩm & Tên */
+    .item-info { display: flex; align-items: center; gap: 12px; }
+    .item-info img { 
+        width: 50px; height: 50px; 
+        object-fit: cover; 
+        border-radius: 8px; 
+        border: 1px solid #eee;
+        flex-shrink: 0; /* Không bị méo ảnh */
+    }
     
+    /* Nút xóa đỏ */
     .btn-remove {
       color: #ff4d4d;
-      background: none; border: none;
-      cursor: pointer; font-weight: 600;
-      font-size: 0.9rem;
+      background: #fff0f0;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.8rem;
+      white-space: nowrap;
     }
-    .btn-remove:hover { text-decoration: underline; }
 
-    /* column right: checkout form */
+    /* Khung thanh toán (Form) */
     .checkout-box {
       background: white;
-      padding: 25px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       position: sticky;
-      top: 100px; /* stroke-width: */
+      top: 20px; /* Trượt theo khi cuộn trên máy tính */
     }
-
-    .checkout-box h3 { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
     .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; }
+    
+    /* Input to rõ cho ngón tay bấm */
     .form-group input, .form-group textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px; /* Tăng vùng bấm */
       border: 1px solid #ddd;
       border-radius: 8px;
-      font-family: var(--font-main);
-      font-size: 1rem;
-      transition: border 0.3s;
-    }
-    .form-group input:focus, .form-group textarea:focus {
-      border-color: var(--primary-color);
-      outline: none;
-    }
-
-    .total-row {
-      display: flex; justify-content: space-between;
-      font-size: 1.2rem; font-weight: 800;
-      margin: 20px 0; color: var(--primary-dark);
+      font-size: 16px; /* Size 16px để iPhone không tự zoom màn hình */
+      font-family: 'Inter', sans-serif;
     }
 
     .btn-checkout {
       width: 100%;
-      padding: 15px;
-      background: var(--primary-color);
+      padding: 16px;
+      background: #0dec84;
       color: white; border: none;
-      border-radius: 8px;
-      font-size: 1rem; font-weight: bold;
+      border-radius: 30px; /* Bo tròn như app */
+      font-size: 1.1rem; font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
+      box-shadow: 0 4px 15px rgba(13, 236, 132, 0.4); /* Bóng nút đẹp */
     }
-    .btn-checkout:hover { background: var(--primary-dark); }
 
-    /*responsive mobile */
+    /* --- CSS RIÊNG CHO ĐIỆN THOẠI --- */
     @media (max-width: 768px) {
-      .cart-layout { grid-template-columns: 1fr; }  /*one column on small screens */
-      .item-info img { width: 50px; height: 50px; }
+      .cart-layout { 
+          grid-template-columns: 1fr; /* Chuyển về 1 cột dọc */
+          gap: 20px;
+      }
+      
+      .cart-container, .checkout-box {
+          padding: 15px; /* Giảm lề một chút cho rộng chỗ */
+      }
+
+      /* Ẩn bớt tiêu đề bảng cho đỡ chật */
+      .cart-table th { font-size: 0.8rem; }
+      
+      /* Input số lượng to ra tí cho dễ bấm */
+      input[type="number"] {
+          padding: 8px;
+          width: 60px !important;
+          text-align: center;
+      }
     }
-  </style>
+</style>
 </head>
 <body>
   <header>
@@ -123,6 +149,7 @@
 
     <div class="cart-layout">
       <section class="cart-container">
+        <div class="table-wrapper"> 
         <table class="cart-table">
           <thead>
             <tr>
