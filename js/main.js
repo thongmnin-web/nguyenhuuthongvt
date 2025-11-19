@@ -93,10 +93,6 @@ function renderCart() {
     cartBody.innerHTML = html;
     if(totalPriceEl) totalPriceEl.innerText = formatCurrency(total);
 }
-
-// --- CÁC HÀM PHỤ TRỢ ---
-
-// Cập nhật số lượng khi bấm nút tăng giảm
 function updateQuantity(index, newQty) {
     let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
     newQty = parseInt(newQty);
@@ -106,7 +102,7 @@ function updateQuantity(index, newQty) {
     if (cart[index]) {
         cart[index].quantity = newQty;
         localStorage.setItem(CART_KEY, JSON.stringify(cart));
-        renderCart(); // Vẽ lại giao diện
+        renderCart();
     }
 }
 
@@ -119,12 +115,11 @@ function handleCheckout(e) {
         return;
     }
 
-    // 1. Lấy thông tin
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
 
-    // 2. Tạo nội dung tin nhắn Zalo
+
     let msg = `👋 Có đơn hàng mới!\n`;
     msg += `👤 Tên: ${name}\n`;
     msg += `📞 SĐT: ${phone}\n`;
@@ -141,7 +136,7 @@ function handleCheckout(e) {
     msg += `----------------\n`;
     msg += `💰 TỔNG CỘNG: ${formatCurrency(total)}`;
 
-    // 3. Lưu vào Manage (để xem lịch sử trên máy khách)
+
     const newOrder = {
         id: Date.now(),
         date: new Date().toLocaleString('vi-VN'),
@@ -153,12 +148,10 @@ function handleCheckout(e) {
     orders.push(newOrder);
     localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
 
-    // 4. Xóa giỏ hàng
+
     localStorage.removeItem(CART_KEY);
 
-    // 5. Mở Zalo Chat với nội dung đơn hàng
-    // Thay số điện thoại của bạn vào chỗ 0397768941 (bỏ số 0 đầu, giữ 84)
-    // Ví dụ: Zalo của bạn là 0397768941 -> dùng 84397768941
+  
     const yourZaloPhone = '84397768941'; 
     const zaloUrl = `https://zalo.me/${yourZaloPhone}?text=${encodeURIComponent(msg)}`;
     
