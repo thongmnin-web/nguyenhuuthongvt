@@ -2,59 +2,142 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Quản lý đơn hàng</title>
+  <title>Quản lý đơn hàng (Admin)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    .order-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); }
-    .order-table th, .order-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
+    /* CSS cho bảng đơn hàng */
+    .order-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+    .order-table th, .order-table td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
     .order-table th { background: var(--primary-color); color: white; font-weight: 600; }
-    .order-table tr:hover { background: #f1f1f1; }
+    .order-table tr:hover { background: #f9f9f9; }
+
+    /* CSS cho màn hình Đăng nhập (MỚI) */
+    #login-screen {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: #f4f7f6;
+        display: flex; justify-content: center; align-items: center;
+        z-index: 9999;
+    }
+    .login-box {
+        background: white; padding: 40px; border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;
+        max-width: 400px; width: 90%;
+    }
+    .login-box h2 { margin-bottom: 20px; color: #333; }
+    .login-box input {
+        width: 100%; padding: 12px; margin-bottom: 15px;
+        border: 1px solid #ddd; border-radius: 8px;
+        font-size: 1.2rem; text-align: center; letter-spacing: 5px;
+    }
+    .btn-login {
+        width: 100%; padding: 12px; background: var(--primary-color);
+        color: white; border: none; border-radius: 8px;
+        font-size: 1rem; font-weight: bold; cursor: pointer;
+    }
+    .btn-login:hover { background: var(--primary-dark); }
+    
+    /* Mặc định ẩn nội dung quản lý */
+    #admin-content { display: none; }
   </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <a class="brand" href="index.html">Shop Online</a>
-      <div>
-        <a href="index.html">Trang chủ</a>
-        <a href="catalog.html">Sản phẩm</a>
-        <a href="manage.html" class="active">Quản lý</a>
+
+  <div id="login-screen">
+      <div class="login-box">
+          <h2>🔒 Admin Access</h2>
+          <p style="margin-bottom: 20px; color: #666;">Vui lòng nhập mã PIN để xem đơn hàng</p>
+          <form onsubmit="checkPin(event)">
+              <input type="password" id="pin-input" placeholder="******" maxlength="6" required autofocus>
+              <button type="submit" class="btn-login">Mở Khóa</button>
+          </form>
+          <p id="error-msg" style="color: red; margin-top: 10px; display: none;">Mã PIN sai! Vui lòng thử lại.</p>
       </div>
-    </nav>
-  </header>
+  </div>
 
-  <main>
-    <h2>Danh sách đơn hàng</h2>
-    <div style="overflow-x: auto;">
-        <table class="order-table" id="orders-table">
-        <thead>
-            <tr>
-            <th>Thời gian</th>
-            <th>Họ tên</th>
-            <th>Địa chỉ</th>
-            <th>Số điện thoại</th>
-            <th>Sản phẩm</th>
-            </tr>
-        </thead>
-        <tbody>
-            </tbody>
-        </table>
-    </div>
-    <p id="no-orders" style="display:none; text-align:center; margin-top:20px; color:#888;">Chưa có đơn hàng nào.</p>
-  </main>
+  <div id="admin-content">
+      <header>
+        <nav>
+          <a class="brand" href="index.html">Shop Online</a>
+          <div>
+            <a href="index.html">Trang chủ</a>
+            <a href="catalog.html">Sản phẩm</a>
+            <a href="manage.html" class="active">Quản lý</a>
+          </div>
+        </nav>
+      </header>
 
-  <footer>
-    <p class="footer-copyright">&copy; Shop Online</p>
-  </footer>
-  
-  <a href="https://zalo.me/84397768941" target="_blank" class="zalo-btn"> <span class="zalo-icon-circle">
-      <img src="img/icon1.png" alt="Zalo">
-    </span>
-    Liên hệ Zalo
-  </a>
+      <main>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>Danh sách đơn hàng</h2>
+            <button onclick="logout()" style="padding:8px 15px; background:#ff4d4d; color:white; border:none; border-radius:6px; cursor:pointer;">Đăng xuất</button>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table class="order-table" id="orders-table">
+            <thead>
+                <tr>
+                <th>Thời gian</th>
+                <th>Họ tên</th>
+                <th>SĐT / Địa chỉ</th>
+                <th>Sản phẩm mua</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+            </table>
+        </div>
+        <p id="no-orders" style="display:none; text-align:center; margin-top:20px; color:#888;">Chưa có đơn hàng nào.</p>
+      </main>
+
+      <footer>
+        <p class="footer-copyright">&copy; Shop Online</p>
+      </footer>
+  </div>
 
   <script src="js/manage.js"></script>
+
+  <script>
+    // --- Cấu Hình Mã Pin Xem Đơn Hàng Tại Đây---
+      const ADMIN_PIN = "123456"; // <--- Anh Thiện Đổi Mã Pin Ở Đây
+
+
+      function checkPin(e) {
+          e.preventDefault(); // blocklist
+          const input = document.getElementById('pin-input').value;
+          const errorMsg = document.getElementById('error-msg');
+
+          if (input === ADMIN_PIN) {
+              // if correct PIN
+              document.getElementById('login-screen').style.display = 'none'; // Hide login screen
+              document.getElementById('admin-content').style.display = 'block'; // Show admin content
+              sessionStorage.setItem('is_admin_logged_in', 'true'); // Save temporary login state
+          } else {
+              // if incorrect PIN
+              errorMsg.style.display = 'block';
+              document.getElementById('pin-input').value = ''; // Clear input field
+              document.getElementById('pin-input').focus();
+          }
+      }
+
+      // logout function
+      function logout() {
+          sessionStorage.removeItem('is_admin_logged_in');
+          location.reload(); // Reload page to lock again
+      }
+
+      // Automatically check if already logged in before (to avoid re-entering PIN on F5)
+      window.onload = function() {
+          if (sessionStorage.getItem('is_admin_logged_in') === 'true') {
+              document.getElementById('login-screen').style.display = 'none';
+              document.getElementById('admin-content').style.display = 'block';
+          }
+          // Call renderOrders function from manage.js
+          if(typeof renderOrders === 'function') {
+              renderOrders();
+          }
+      }
+  </script>
 </body>
 </html>
