@@ -150,15 +150,14 @@ function handleCheckout(e) {
     // Xóa giỏ hàng
     localStorage.removeItem(CART_KEY);
 
-    // Gửi qua Zalo (Nhớ thay số điện thoại của bạn vào đây, dùng 84 đầu)
+    
     const yourZaloPhone = '84397768941'; 
     const zaloUrl = `https://zalo.me/${yourZaloPhone}?text=${encodeURIComponent(msg)}`;
-    
-    if(confirm('Đơn hàng đã tạo xong! Bấm OK để gửi qua Zalo.')) {
-        window.open(zaloUrl, '_blank');
-        window.location.href = 'index.html';
-    }
+
+if(confirm('Đơn hàng đã tạo xong! Bấm OK để chuyển sang Zalo gửi đơn.')) {
+    window.location.href = zaloUrl; 
+}
 }
 
-// Tự động chạy hàm hiển thị khi tải trang
+//auto render cart on page load
 document.addEventListener('DOMContentLoaded', renderCart);

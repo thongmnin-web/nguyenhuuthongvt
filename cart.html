@@ -109,10 +109,14 @@
       box-shadow: 0 4px 15px rgba(13, 236, 132, 0.4); /* Bóng nút đẹp */
     }
 
-    /* --- CSS RIÊNG CHO ĐIỆN THOẠI --- */
+    .total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 1.2rem; font-weight: 600; margin: 20px 0;
+    }
+    /* Tối ưu cho điện thoại không lỗi font khi vào web */
     @media (max-width: 768px) {
       .cart-layout { 
-          grid-template-columns: 1fr; /* Chuyển về 1 cột dọc */
+          grid-template-columns: 1fr;
           gap: 20px;
       }
       
@@ -120,10 +124,10 @@
           padding: 15px; /* Giảm lề một chút cho rộng chỗ */
       }
 
-      /* Ẩn bớt tiêu đề bảng cho đỡ chật */
+      /* Ẩn bớt title table  */
       .cart-table th { font-size: 0.8rem; }
       
-      /* Input số lượng to ra tí cho dễ bấm */
+      /* Giảm kích thước ô số lượng */
       input[type="number"] {
           padding: 8px;
           width: 60px !important;
