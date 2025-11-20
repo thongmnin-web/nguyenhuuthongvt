@@ -1,26 +1,24 @@
 const ORDERS_KEY = 'shop_orders';
 
-// Hàm định dạng tiền tệ (VND)
 function formatCurrency(amount) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 }
 
-// Hiển thị danh sách đơn hàng
+
 function renderOrders() {
     const tableBody = document.querySelector('#orders-table tbody');
     const noOrdersMsg = document.getElementById('no-orders');
     
-    // Lấy danh sách đơn hàng từ bộ nhớ
+
     let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
 
-    // Nếu chưa có đơn nào
     if (orders.length === 0) {
         if(noOrdersMsg) noOrdersMsg.style.display = 'block';
         if(tableBody) tableBody.innerHTML = ''; 
         return;
     }
 
-    // Nếu có đơn hàng
+
     if(noOrdersMsg) noOrdersMsg.style.display = 'none';
 
     let html = '';

@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 <style>
-    /* Layout chung */
+
     .cart-layout {
       display: grid;
       grid-template-columns: 2fr 1fr; /* Máy tính: 2 phần giỏ, 1 phần thanh toán */
@@ -28,13 +28,13 @@
     .table-wrapper {
         width: 100%;
         overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá to */
-        -webkit-overflow-scrolling: touch; /* Cuộn mượt trên iPhone */
+        -webkit-overflow-scrolling: touch /* Cuộn mượt */;
     }
 
     .cart-table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 400px; /* Đảm bảo bảng không bị co rúm lại quá bé */
+      min-width: 400px; 
     }
 
     .cart-table th {
@@ -43,7 +43,7 @@
       color: #666;
       font-size: 0.9rem;
       border-bottom: 1px solid #eee;
-      white-space: nowrap; /* Không xuống dòng tiêu đề */
+      white-space: nowrap; 
     }
 
     .cart-table td {
@@ -55,14 +55,14 @@
     /* Ảnh sản phẩm & Tên */
     .item-info { display: flex; align-items: center; gap: 12px; }
     .item-info img { 
-        width: 50px; height: 50px; 
-        object-fit: cover; 
-        border-radius: 8px; 
-        border: 1px solid #eee;
+        width: 50px; height: 50px;    /* Kích thước ảnh */
+        object-fit: cover; /* Giữ tỉ lệ ảnh */
+        border-radius: 8px; /* Bo góc ảnh */
+        border: 1px solid #eee; /* Viền ảnh */
         flex-shrink: 0; /* Không bị méo ảnh */
     }
     
-    /* Nút xóa đỏ */
+  
     .btn-remove {
       color: #ff4d4d;
       background: #fff0f0;
@@ -75,26 +75,26 @@
       white-space: nowrap;
     }
 
-    /* Khung thanh toán (Form) */
+
     .checkout-box {
       background: white;
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       position: sticky;
-      top: 20px; /* Trượt theo khi cuộn trên máy tính */
+      top: 20px; 
     }
 
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; }
     
-    /* Input to rõ cho ngón tay bấm */
+
     .form-group input, .form-group textarea {
       width: 100%;
-      padding: 12px; /* Tăng vùng bấm */
+      padding: 12px; 
       border: 1px solid #ddd;
       border-radius: 8px;
-      font-size: 16px; /* Size 16px để iPhone không tự zoom màn hình */
+      font-size: 16px; 
       font-family: 'Inter', sans-serif;
     }
 
@@ -103,10 +103,10 @@
       padding: 16px;
       background: #0dec84;
       color: white; border: none;
-      border-radius: 30px; /* Bo tròn như app */
+      border-radius: 30px;
       font-size: 1.1rem; font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(13, 236, 132, 0.4); /* Bóng nút đẹp */
+      box-shadow: 0 4px 15px rgba(13, 236, 132, 0.4); 
     }
 
     .total-row {
@@ -121,7 +121,7 @@
       }
       
       .cart-container, .checkout-box {
-          padding: 15px; /* Giảm lề một chút cho rộng chỗ */
+          padding: 15px; 
       }
 
       /* Ẩn bớt title table  */
@@ -202,7 +202,7 @@
   </main>
 
   <footer>
-    <p>&copy; 2025 Shop Online</p>
+    <p>&copy; Nguyễn Hữu Thiện</p>
   </footer>
 
   <script src="js/main.js"></script>

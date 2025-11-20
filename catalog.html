@@ -23,11 +23,13 @@
     <h2 style="text-align:center; margin-bottom:20px;">Danh Mục Sản Phẩm</h2>
     
     <div class="category-tabs">
-      <a class="btn-cat active" onclick="filterCategory('all', this)">Tất cả</a>
+      <a class="btn-cat" onclick="filterCategory('all', this)">Tất cả</a>
       <a class="btn-cat" onclick="filterCategory('do-dien', this)">💡 Đồ Điện</a>
       <a class="btn-cat" onclick="filterCategory('pin', this)">🔋 Pin</a>
       <a class="btn-cat" onclick="filterCategory('mach-dien', this)">⚡ Mạch điện</a>
-    </div>
+
+</div>
+
 
     <div id="product-list" class="products-container">
         <div class="product category-do-dien">
@@ -66,6 +68,7 @@
                 <button class="btn-cart" onclick="addToCart('Pin AA', 20000, 'img/sp6.jpg')">Thêm</button>
                 <button class="btn-buy" onclick="buyNow('Pin AA', 20000, 'img/sp6.jpg')">Mua ngay</button>
             </div>
+            
         </div>
 
         <div class="product category-mach-dien">
@@ -116,7 +119,7 @@
         </div>
   </main>
 
-  <footer><p>&copy; 2025 Shop Online</p></footer>
+  <footer><p>&copy; Nguyễn Hữu Thiện</p></footer>
   
   <div id="img-modal" class="modal" onclick="this.style.display='none'">
     <img id="img-modal-content" src="">
@@ -124,22 +127,22 @@
 
   <script src="js/main.js"></script>
   <script>
-    // Script lọc sản phẩm đơn giản
-    function filterCategory(category, btnElement) {
-        // Highlight nút đang chọn
-        document.querySelectorAll('.btn-cat').forEach(el => el.classList.remove('active'));
-        btnElement.classList.add('active');
 
-        // Hiện thị sản phẩm theo danh mục
+    function filterCategory(category, btnElement) {
+
+        document.querySelectorAll('.btn-cat').forEach(el => el.classList.remove('active'));
+        if(btnElement) btnElement.classList.add('active');
+
+
         const products = document.querySelectorAll('.product');
         products.forEach(prod => {
             if (category === 'all') {
-                prod.style.display = 'flex';
+                prod.classList.add('show');
             } else {
                 if (prod.classList.contains('category-' + category)) {
-                    prod.style.display = 'flex';
+                    prod.classList.add('show');
                 } else {
-                    prod.style.display = 'none';
+                    prod.classList.remove('show');
                 }
             }
         });

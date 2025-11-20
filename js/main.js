@@ -1,17 +1,15 @@
-// --- CẤU HÌNH CHUNG ---
+
 const CART_KEY = 'shop_cart'; 
 const ORDERS_KEY = 'shop_orders'; 
-
-// Hàm định dạng tiền tệ (VND)
 function formatCurrency(amount) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 }
 
-// --- 1. THÊM VÀO GIỎ HÀNG ---
+
 function addToCart(name, price, img) {
     let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
     let existingItem = cart.find(item => item.name === name);
-    
+
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
@@ -19,13 +17,13 @@ function addToCart(name, price, img) {
     }
     
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    // Chỉ hiện thông báo nếu không phải đang ở trang giỏ hàng (để tránh spam popup khi mua ngay)
+ 
     if (!window.location.pathname.includes('cart.html')) {
         alert(`Đã thêm "${name}" vào giỏ hàng!`);
     }
 }
 
-// --- 2. HIỂN THỊ GIỎ HÀNG (Quan trọng) ---
+
 function renderCart() {
     const cartBody = document.getElementById('cart-body');
     const totalPriceEl = document.getElementById('total-price');
@@ -83,17 +81,16 @@ function renderCart() {
     if(totalPriceEl) totalPriceEl.innerText = formatCurrency(total);
 }
 
-// --- 3. XÓA SẢN PHẨM (Chức năng bạn đang cần) ---
 function removeFromCart(index) {
     if (confirm('Bạn có chắc muốn xóa sản phẩm này không?')) {
         let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-        cart.splice(index, 1); // Xóa 1 phần tử tại vị trí index
-        localStorage.setItem(CART_KEY, JSON.stringify(cart)); // Lưu lại mảng mới
-        renderCart(); // Vẽ lại giao diện ngay lập tức
+        cart.splice(index, 1); 
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        renderCart();
     }
 }
 
-// --- 5. THANH TOÁN: GỬI GOOGLE SHEETS & ZALO ---
+
 function handleCheckout(e) {
     e.preventDefault();
     
@@ -113,11 +110,11 @@ function handleCheckout(e) {
         return;
     }
 
-    // 1. Hiệu ứng đang gửi (để khách không bấm nhiều lần)
+    // animations
     btnSubmit.innerHTML = "⏳ Đang gửi đơn hàng...";
     btnSubmit.disabled = true;
 
-    // 2. Chuẩn bị dữ liệu gửi đi
+    // animations end
     let productNames = cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
     let totalMoney = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
@@ -130,25 +127,24 @@ function handleCheckout(e) {
         total: formatCurrency(totalMoney)
     };
 
-    // --- CẤU HÌNH URL GOOGLE SHEETS CỦA BẠN ---
-    // Dán cái link dài ngoằng bạn vừa copy ở Bước 1 vào giữa 2 dấu nháy dưới đây:
+
+    // Dánlink google script ở đâyyy
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyt-ME7Flu-76TYVFodyINKCc1ctkPPZ5dbB6Qg4tHpoGNejMhqys9_DRypc5jNmialew/exec"; 
 
-    // 3. Gửi lên Google Sheets
+   
     fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors", // Quan trọng để không bị lỗi chặn
+        mode: "no-cors", 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataToSend)
     })
     .then(() => {
-        // 4. Gửi thành công -> Chuyển tiếp qua Zalo
-        // Tạo link Zalo
+     
         const yourZaloPhone = '84397768941'; // Số của bạn
         let msg = `DON HANG MOI!\nKhach: ${name}\nSDT: ${phone}\nTong: ${formatCurrency(totalMoney)}\nChi tiet: ${productNames}`;
         const zaloUrl = `https://zalo.me/${yourZaloPhone}?text=${encodeURIComponent(msg)}`;
         
-        // Xóa giỏ hàng
+    
         localStorage.removeItem(CART_KEY);
         
         if(confirm('Đã gửi đơn hàng thành công! Bấm OK để báo qua Zalo.')) {
